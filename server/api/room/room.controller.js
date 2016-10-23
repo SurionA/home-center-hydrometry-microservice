@@ -1,17 +1,17 @@
 /**
- * GET     /api/service              ->  index
- * POST    /api/service              ->  create
- * GET     /api/service/:id          ->  show
- * PUT     /api/service/:id          ->  update
- * PATCH   /api/service/:id          ->  update
- * DELETE  /api/service/:id          ->  destroy
+ * GET     /api/room              ->  index
+ * POST    /api/room              ->  create
+ * GET     /api/room/:id          ->  show
+ * PUT     /api/room/:id          ->  update
+ * PATCH   /api/room/:id          ->  update
+ * DELETE  /api/room/:id          ->  destroy
  */
 
 /**
- * @description Service Model
- * @param Service
+ * @description Room Model
+ * @param Room
  */
-import Service from './service.model';
+import Room from './room.model';
 
 /**
  * @description API Response Utility functions
@@ -38,7 +38,7 @@ import {
  * @param {Object} res - Express Framework Response Object
  */
 function index(req, res) {
-  return Service.find()
+  return Room.find()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -50,7 +50,7 @@ function index(req, res) {
  * @param {Object} res - Express Framework Response Object
  */
 function show(req, res) {
-  return Service.findById(req.params.id)
+  return Room.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -63,7 +63,7 @@ function show(req, res) {
  * @param {Object} res - Express Framework Response Object
  */
 function create(req, res) {
-  return Service.create(req.body)
+  return Room.create(req.body)
     .then(respondWithResult(res, 201))
     .catch(validationError(res));
 }
@@ -79,7 +79,7 @@ function update(req, res) {
     delete req.body._id;
   }
 
-  return Service.findById(req.params.id)
+  return Room.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
     .then(respondWithResult(res))
@@ -93,7 +93,7 @@ function update(req, res) {
  * @param {Object} res - Express Framework Response Object
  */
 function destroy(req, res) {
-  return Service.findById(req.params.id)
+  return Room.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));

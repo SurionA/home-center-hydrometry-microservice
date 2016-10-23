@@ -7,18 +7,18 @@
 import { EventEmitter } from 'events';
 
 /**
- * @description Service MongoDB schema
- * @param Service
+ * @description Room MongoDB schema
+ * @param Room
  */
-import Service from './service.model';
+import Room from './room.model';
 
 /**
- * @description Service Events Emitter
- * @param ServiceEvents
+ * @description Room Events Emitter
+ * @param RoomEvents
  */
-const ServiceEvents = new EventEmitter();
+const RoomEvents = new EventEmitter();
 
-ServiceEvents.setMaxListeners(0);
+RoomEvents.setMaxListeners(0);
 
 /**
  * @description Events to listen on
@@ -35,7 +35,7 @@ const events = {
  */
 for (const e in events) {
   const event = events[e];
-  Service.schema.post(e, emitEvent(event));
+  Room.schema.post(e, emitEvent(event));
 }
 
 /**
@@ -46,14 +46,14 @@ for (const e in events) {
  */
 function emitEvent(event) {
   return (doc, options, done) => {
-    ServiceEvents.emit(event + ':' + doc._id, doc);
-    ServiceEvents.emit(event, doc);
+    RoomEvents.emit(event + ':' + doc._id, doc);
+    RoomEvents.emit(event, doc);
     done(null);
   }
 }
 
 /**
- * @export ServiceEvents
+ * @export RoomEvents
  * @default
  */
-export default ServiceEvents;
+export default RoomEvents;

@@ -22,11 +22,11 @@ import { Schema } from 'mongoose';
 mongoose.Promise = Promise;
 
 /**
- * @description Service MongoDB Schema
- * @param ServiceSchema
+ * @description Room MongoDB Schema
+ * @param RoomSchema
  * @const
  */
-const ServiceSchema = new Schema({
+const RoomSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -42,10 +42,10 @@ const ServiceSchema = new Schema({
 });
 
 /**
- * @description Virtual Method that returns service data
+ * @description Virtual Method that returns room data
  */
-ServiceSchema
-  .virtual('service')
+RoomSchema
+  .virtual('room')
   .get(function () {
     return {
       'id': this._id,
@@ -56,14 +56,14 @@ ServiceSchema
 /**
  * @description Validate if name field is not empty
  */
-ServiceSchema
+RoomSchema
   .path('name')
   .validate(name => name.length, 'Name cannot be empty');
 
 /**
  * @description Validate if name is not taken
  */
-ServiceSchema
+RoomSchema
   .path('name')
   .validate(function (name, respond) {
     const self = this;
@@ -77,7 +77,7 @@ ServiceSchema
 /**
  * @description Every update set new updatedAt date
  */
-ServiceSchema
+RoomSchema
   .post('update', function () {
     this.update({},{
       $set: {
@@ -87,7 +87,7 @@ ServiceSchema
   });
 
 /**
- * @exports serviceSchema
+ * @exports roomSchema
  * @default
  */
-export default mongoose.model('Service', ServiceSchema);
+export default mongoose.model('Room', RoomSchema);

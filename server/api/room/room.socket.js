@@ -1,13 +1,13 @@
 'use strict';
 
 /**
- * @description Service Events Emitter
- * @param ServiceEvents
+ * @description Room Events Emitter
+ * @param RoomEvents
  */
-import ServiceEvents from './service.events';
+import RoomEvents from './room.events';
 
 /**
- * @description Service Model Events to emit
+ * @description Room Model Events to emit
  * @param events
  */
 const events = ['save', 'remove'];
@@ -20,9 +20,9 @@ const events = ['save', 'remove'];
 function register(socket) {
   for (let i = 0, eventsLength = events.length; i < eventsLength; i++) {
     const event = events[i];
-    const listener = createListener('service:' + event, socket);
+    const listener = createListener('room:' + event, socket);
 
-    ServiceEvents.on(event, listener);
+    RoomEvents.on(event, listener);
     socket.on('disconnect', removeListener(event, listener));
   }
 }
@@ -47,7 +47,7 @@ function createListener(event, socket) {
  */
 function removeListener(event, listener) {
   return () => {
-    ServiceEvents.removeListener(event, listener);
+    RoomEvents.removeListener(event, listener);
   };
 }
 

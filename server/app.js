@@ -71,11 +71,9 @@ initRoutes(app);
  * @description Start API Server
  */
 const startServer = () => {
-  if (!module.parent) {
     server.listen(process.env.PORT, process.env.IP, () => {
       console.log('Express server listening on %s:%s in %s mode', process.env.IP, process.env.PORT, process.env.NODE_ENV);
     });
-  }
 };
 
 /**
