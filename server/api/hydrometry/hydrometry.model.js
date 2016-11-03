@@ -49,7 +49,12 @@ const HydrometrySchema = new Schema({
     required: false,
     trim: true
   },
-  humidity: {
+  inside_humidity: {
+    type: Number, default: 0,
+    required: true,
+    trim: true
+  },
+  outside_humidity: {
     type: Number, default: 0,
     required: true,
     trim: true
