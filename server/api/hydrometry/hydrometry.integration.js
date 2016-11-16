@@ -1,40 +1,16 @@
 'use strict';
 
 import request from 'supertest';
+import mongoose from 'mongoose';
 import { expect } from 'chai';
 import Hydrometry from './hydrometry.model';
 
 let app = require('../../app');
 let newHydrometry;
-let newRoom;
+let newRoom = {_id: '579b40bb50088b03002850ed'};
 
 describe('Hydrometry API:', () => {
 
-  before(done => {
-      request(app)
-        .post('/api/rooms')
-        .send({
-          name: 'Room Test'
-        })
-        .expect(201)
-        .expect('Content-Type', /json/)
-        .end((err, res) => {
-          if (err) return done(err);
-          newRoom = res.body;
-          Hydrometry.remove({})
-            .then(() => done())
-        });
-  });
-
-  after(done => {
-    request(app)
-      .delete('/api/rooms/' + newRoom._id)
-      .expect(204)
-      .end((err, res) => {
-        if (err) return done(err);
-        done();
-      });
-  });
   describe('GET /api/hydrometries', () => {
     let hydrometries;
 
@@ -63,7 +39,9 @@ describe('Hydrometry API:', () => {
         .send({
           room: newRoom._id,
           inside_temperature: 20,
-          humidity: 40
+          outside_temperature: 25,
+          inside_humidity: 40,
+          outside_humidity: 50
         })
         .expect(201)
         .expect('Content-Type', /json/)
@@ -84,9 +62,11 @@ describe('Hydrometry API:', () => {
       expect(newHydrometry).ownProperty('inside_temperature');
       expect(newHydrometry.inside_temperature).to.equal(20);
       expect(newHydrometry).ownProperty('outside_temperature');
-      expect(newHydrometry.outside_temperature).to.equal(0);
-      expect(newHydrometry).ownProperty('humidity');
-      expect(newHydrometry.humidity).to.equal(40);
+      expect(newHydrometry.outside_temperature).to.equal(25);
+      expect(newHydrometry).ownProperty('inside_humidity');
+      expect(newHydrometry.inside_humidity).to.equal(40);
+      expect(newHydrometry).ownProperty('outside_humidity');
+      expect(newHydrometry.outside_humidity).to.equal(50);
       expect(newHydrometry).ownProperty('createdAt');
       expect(newHydrometry.createdAt).to.not.be.undefined;
       expect(newHydrometry.createdAt).to.not.be.null;
@@ -123,9 +103,11 @@ describe('Hydrometry API:', () => {
       expect(hydrometry).ownProperty('inside_temperature');
       expect(hydrometry.inside_temperature).to.equal(20);
       expect(hydrometry).ownProperty('outside_temperature');
-      expect(hydrometry.outside_temperature).to.equal(0);
-      expect(hydrometry).ownProperty('humidity');
-      expect(hydrometry.humidity).to.equal(40);
+      expect(hydrometry.outside_temperature).to.equal(25);
+      expect(hydrometry).ownProperty('inside_humidity');
+      expect(hydrometry.inside_humidity).to.equal(40);
+      expect(hydrometry).ownProperty('outside_humidity');
+      expect(hydrometry.outside_humidity).to.equal(50);
       expect(hydrometry).ownProperty('createdAt');
       expect(hydrometry.createdAt).to.not.be.undefined;
       expect(hydrometry.createdAt).to.not.be.null;
@@ -142,7 +124,8 @@ describe('Hydrometry API:', () => {
         .send({
 
           _id: newHydrometry._id,
-          outside_temperature: 15
+          outside_temperature: 15,
+          outside_humidity: 65
         })
         .expect(200)
         .expect('Content-Type', /json/)
@@ -168,8 +151,10 @@ describe('Hydrometry API:', () => {
       expect(updatedHydrometry.inside_temperature).to.equal(20);
       expect(updatedHydrometry).ownProperty('outside_temperature');
       expect(updatedHydrometry.outside_temperature).to.equal(15);
-      expect(updatedHydrometry).ownProperty('humidity');
-      expect(updatedHydrometry.humidity).to.equal(40);
+      expect(updatedHydrometry).ownProperty('inside_humidity');
+      expect(updatedHydrometry.inside_humidity).to.equal(40);
+      expect(updatedHydrometry).ownProperty('outside_humidity');
+      expect(updatedHydrometry.outside_humidity).to.equal(65);
       expect(updatedHydrometry).ownProperty('createdAt');
       expect(updatedHydrometry.createdAt).to.not.be.undefined;
       expect(updatedHydrometry.createdAt).to.not.be.null;
@@ -188,7 +173,7 @@ describe('Hydrometry API:', () => {
         .put('/api/hydrometries/' + newHydrometry._id)
         .send({
           _id: newHydrometry._id,
-          humidity: 55
+          inside_humidity: 55
         })
         .expect(200)
         .expect('Content-Type', /json/)
@@ -214,14 +199,13 @@ describe('Hydrometry API:', () => {
       expect(patchedHydrometry.inside_temperature).to.equal(20);
       expect(patchedHydrometry).ownProperty('outside_temperature');
       expect(patchedHydrometry.outside_temperature).to.equal(15);
-      expect(patchedHydrometry).ownProperty('humidity');
-      expect(patchedHydrometry.humidity).to.equal(55);
+      expect(patchedHydrometry).ownProperty('inside_humidity');
+      expect(patchedHydrometry.inside_humidity).to.equal(55);
+      expect(patchedHydrometry).ownProperty('outside_humidity');
+      expect(patchedHydrometry.outside_humidity).to.equal(65);
       expect(patchedHydrometry).ownProperty('createdAt');
       expect(patchedHydrometry.createdAt).to.not.be.undefined;
       expect(patchedHydrometry.createdAt).to.not.be.null;
-      // expect(patchedHydrometry).ownProperty('updatedAt');
-      // expect(patchedHydrometry.updatedAt).to.not.be.undefined;
-      // expect(patchedHydrometry.updatedAt).to.not.be.null;
     });
 
   });

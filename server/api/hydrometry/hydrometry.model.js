@@ -4,7 +4,6 @@
  * @description Hydrometry Model
  * @param Hydrometry
  */
-import Room from '../room/room.model';
 
 /**
  * @description MongoDB connector
@@ -83,20 +82,6 @@ HydrometrySchema
 HydrometrySchema
   .path('room')
   .validate(room => room.length, 'Room cannot be empty');
-
-/**
- * @description Validate if room is not taken
- */
-HydrometrySchema
-  .path('room')
-  .validate(function (room, respond) {
-    const self = this;
-    return Room.findById({_id: room }).exec()
-      .then(room => {
-        if (room) return respond(true);
-        return respond(false);
-      })
-  }, 'The specified room does not exist.');
 
 /**
  * @description Every update set new updatedAt date

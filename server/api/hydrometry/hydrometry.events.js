@@ -7,16 +7,17 @@
 import { EventEmitter } from 'events';
 
 /**
- * @description Hydrometry MongoDB schema
- * @param Hydrometry
+ * @description MongoDB connector
+ * @param mongoose
  */
-import Hydrometry from './hydrometry.model';
+import mongoose from 'mongoose';
 
 /**
  * @description Hydrometry Events Emitter
  * @param HydrometryEvents
  */
 const HydrometryEvents = new EventEmitter();
+const Hydrometry = mongoose.model('Hydrometry');
 
 HydrometryEvents.setMaxListeners(0);
 

@@ -38,7 +38,7 @@ import {
  * @param {Object} res - Express Framework Response Object
  */
 function index(req, res) {
-  return Hydrometry.find()
+  return Hydrometry.find().sort('-createdAt').limit(24)
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
