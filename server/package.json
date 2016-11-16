@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-microservice-starter",
+  "name": "nodejs-microservice-temperature",
   "version": "1.2.0",
-  "description": "NodeJS RESTful API Microservice",
+  "description": "NodeJS RESTful API Microservice Temperature",
   "main": "dist/index.js",
   "scripts": {
     "start": "pm2 start index.js -i 4 --name=\"microservice\" --no-daemon",
@@ -80,6 +80,7 @@
     "lodash": "^4.13.1",
     "mongoose": "^4.5.2",
     "morgan": "^1.7.0",
-    "pm2": "^1.1.3"
+    "pm2": "^1.1.3",
+    "socket.io": "^1.5.1"
   }
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-import ServiceSockets from '../api/service/service.socket';
+import HydrometrySockets from '../api/hydrometry/hydrometry.socket';
 
 // When the user disconnects.. perform this
 function onDisconnect(socket) {
@@ -13,7 +13,7 @@ function onConnect(socket) {
     socket.log(JSON.stringify(data, null, 2));
   });
 
-  ServiceSockets(socket);
+  HydrometrySockets(socket);
 }
 
 function initSocket (socketio) {

@@ -28,6 +28,12 @@ dotenv.load({
 import DBConfig from './config/db.conf';
 
 /**
+ * @description SocketIO config class
+ * @param initSocket
+ */
+import { initSocket } from './config/socket.conf';
+
+/**
  * @description Routes config class
  * @param Routes
  */
@@ -65,6 +71,12 @@ ApplicationConfig.init(app);
  * @description Configure Routes
  */
 initRoutes(app);
+
+/**
+ * @description Configure Socket
+ */
+ const io = require('socket.io')(server);
+ initSocket(io);
 
 /**
  * @function startServer

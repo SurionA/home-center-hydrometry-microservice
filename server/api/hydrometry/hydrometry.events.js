@@ -7,27 +7,24 @@
 import { EventEmitter } from 'events';
 
 /**
- * @description MongoDB connector
- * @param mongoose
+ * @description Hydrometry MongoDB schema
+ * @param Hydrometry
  */
-import mongoose from 'mongoose';
+import Hydrometry from './hydrometry.model';
 
 /**
  * @description Hydrometry Events Emitter
  * @param HydrometryEvents
  */
 const HydrometryEvents = new EventEmitter();
-const Hydrometry = mongoose.model('Hydrometry');
-
 HydrometryEvents.setMaxListeners(0);
-
 /**
  * @description Events to listen on
  * @param events
  */
 const events = {
   'afterCreate': 'save',
-  'afterUpdate': 'save',
+  'afterUpdate': 'update',
   'afterDestroy': 'remove'
 };
 
@@ -36,7 +33,8 @@ const events = {
  */
 for (const e in events) {
   const event = events[e];
-  Hydrometry.schema.post(e, emitEvent(event));
+
+  Hydrometry.schema.post(event, emitEvent(event));
 }
 
 /**
@@ -46,11 +44,11 @@ for (const e in events) {
  * @param event - Event to emit
  */
 function emitEvent(event) {
-  return (doc, options, done) => {
+  return (doc, next) => {
     HydrometryEvents.emit(event + ':' + doc._id, doc);
     HydrometryEvents.emit(event, doc);
-    done(null);
-  }
+    next(null);
+  };
 }
 
 /**
