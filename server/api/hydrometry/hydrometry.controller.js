@@ -38,7 +38,13 @@ import {
  * @param {Object} res - Express Framework Response Object
  */
 function index(req, res) {
-  return Hydrometry.find().sort('-createdAt').limit(24)
+  let daysToShow = 1;
+
+  if(req.query && req.query.daysToShow) {
+    daysToShow = parseInt(req.query.daysToShow);
+  }
+
+  return Hydrometry.find().sort('-createdAt').limit(daysToShow * 24)
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
