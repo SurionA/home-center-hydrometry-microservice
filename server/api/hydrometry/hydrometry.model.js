@@ -58,6 +58,21 @@ const HydrometrySchema = new Schema({
     required: true,
     trim: true
   },
+  sunset: {
+    type: Number, default: 0,
+    required: true,
+    trim: true
+  },
+  sunrise: {
+    type: Number, default: 0,
+    required: true,
+    trim: true
+  },
+  weather: {
+    type: Array, default: [],
+    required: true,
+    trim: true
+  },
   createdAt: {
     type: Date,
     default: Date.now
