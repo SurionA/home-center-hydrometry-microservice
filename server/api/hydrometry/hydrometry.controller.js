@@ -23,12 +23,12 @@ import Hydrometry from './hydrometry.model';
  * @param respondWithResult - Respond with DB results
  */
 import {
-  validationError,
-  handleError,
-  handleEntityNotFound,
-  removeEntity,
-  saveUpdates,
-  respondWithResult
+    validationError,
+    handleError,
+    handleEntityNotFound,
+    removeEntity,
+    saveUpdates,
+    respondWithResult,
 } from '../utils';
 
 /**
@@ -38,15 +38,22 @@ import {
  * @param {Object} res - Express Framework Response Object
  */
 function index(req, res) {
-  let daysToShow = 1;
+    let daysToShow = 1;
 
-  if(req.query && req.query.daysToShow) {
-    daysToShow = parseInt(req.query.daysToShow);
-  }
+    if (req.query && req.query.daysToShow) {
+        daysToShow = parseInt(req.query.daysToShow);
+    }
 
-  return Hydrometry.find().sort('-createdAt').limit(daysToShow * 24)
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    return Hydrometry.find()
+        .sort('-createdAt')
+        .limit(daysToShow * 24)
+        .populate({
+            path: 'room',
+            model: 'Room',
+            populate: { path: 'house', model: 'House' },
+        })
+        .then(respondWithResult(res))
+        .catch(handleError(res));
 }
 
 /**
@@ -56,10 +63,15 @@ function index(req, res) {
  * @param {Object} res - Express Framework Response Object
  */
 function show(req, res) {
-  return Hydrometry.findById(req.params.id)
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    return Hydrometry.findById(req.params.id)
+        .populate({
+            path: 'room',
+            model: 'Room',
+            populate: { path: 'house', model: 'House' },
+        })
+        .then(handleEntityNotFound(res))
+        .then(respondWithResult(res))
+        .catch(handleError(res));
 }
 
 /**
@@ -69,9 +81,9 @@ function show(req, res) {
  * @param {Object} res - Express Framework Response Object
  */
 function create(req, res) {
-  return Hydrometry.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(validationError(res));
+    return Hydrometry.create(req.body)
+        .then(respondWithResult(res, 201))
+        .catch(validationError(res));
 }
 
 /**
@@ -81,15 +93,15 @@ function create(req, res) {
  * @param {Object} res - Express Framework Response Object
  */
 function update(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
-  }
+    if (req.body._id) {
+        delete req.body._id;
+    }
 
-  return Hydrometry.findById(req.params.id)
-    .then(handleEntityNotFound(res))
-    .then(saveUpdates(req.body))
-    .then(respondWithResult(res))
-    .catch(validationError(res));
+    return Hydrometry.findById(req.params.id)
+        .then(handleEntityNotFound(res))
+        .then(saveUpdates(req.body))
+        .then(respondWithResult(res))
+        .catch(validationError(res));
 }
 
 /**
@@ -99,10 +111,10 @@ function update(req, res) {
  * @param {Object} res - Express Framework Response Object
  */
 function destroy(req, res) {
-  return Hydrometry.findById(req.params.id)
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
+    return Hydrometry.findById(req.params.id)
+        .then(handleEntityNotFound(res))
+        .then(removeEntity(res))
+        .catch(handleError(res));
 }
 
-export { index, show, create, update, destroy }
+export { index, show, create, update, destroy };
